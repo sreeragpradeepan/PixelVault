@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<title>PixelVault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #1e1e1e;
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#header {
+  background-color: #2a2a2a;
+  padding: 10px 20px;
+  text-align: right;
+}
+
+#header button {
+  padding: 10px 15px;
+  font-weight: bold;
+  background-color: #00d1d1;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#header button:hover {
+  background-color: #00a3a3;
+}
+
+#logo-section {
+  display: flex;
+  align-items: center;
+  padding: 25px;
+  background-color: #333;
+  gap: 20px;
+}
+
+#logo-section img {
+  height: 100px;
+  width: 100px;
+  border-radius: 15px;
+  border: 2px solid #00d1d1;
+}
+
+#logo-title {
+  font-size: 42px;
+  font-weight: bold;
+}
+
+#logo-subtitle {
+  font-size: 18px;
+  color: #bbb;
+}
+
+#menubar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: #444;
+  padding: 15px 10px;
+  gap: 10px;
+}
+
+.category-btn {
+  padding: 10px 25px;
+  font-size: 16px;
+  background-color: #ffd28f;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+.category-btn:hover {
+  transform: scale(1.05);
+}
+
+form#upload-form {
+  margin: 30px auto;
+  text-align: center;
+}
+form#upload-form input[type="file"],
+form#upload-form button {
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 5px;
+  border: none;
+}
+form#upload-form button {
+  background-color: #00d1d1;
+  font-weight: bold;
+  cursor: pointer;
+}
+form#upload-form button:hover {
+  background-color: #00aaaa;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 40px 20px;
+}
+
+.gallery-item {
+  width: 280px;
+  background-color: #2b2b2b;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+
+/* Lightbox */
+#lightbox {
+  position: fixed;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+}
+
+#lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+
+#footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #2a2a2a;
+  color: #aaa;
+  font-size: 14px;
+  margin-top: 50px;
+}
+
+  </style>
+</head>
+<body>
+
+  <div id="header">
+    <button onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+
+  <div id="logo-section">
+    <img src="logo.jpg" alt="Logo">
+    <div id="logo-text">
+      <div id="logo-title">PIXELVAULT</div>
+      <div id="logo-subtitle">Find your desired photos</div>
+    </div>
+  </div>
+
+  <div id="menubar">
+    <button class="category-btn" onclick="filterGallery('all')">All</button>
+    <button class="category-btn" onclick="filterGallery('house')">House</button>
+    <button class="category-btn" onclick="filterGallery('cars')">Cars</button>
+    <button class="category-btn" onclick="filterGallery('boats')">Boats</button>
+  </div>
+
+
+<form id="upload-form" enctype="multipart/form-data" method="POST" action="/upload">
+  <input type="file" name="image" accept="image/*" required />
+  <button type="submit">Upload Image</button>
+</form>
+
+
+  <div class="gallery" id="gallery">
+    <div class="gallery-item house"><img src="house1.jpeg" alt="House"></div>
+    <div class="gallery-item house"><img src="house4.jpg" alt="House"></div>
+    <div class="gallery-item house"><img src="house5.jpg" alt="House"></div>
+    <div class="gallery-item cars"><img src="car1.jpg" alt="Car"></div>
+    <div class="gallery-item cars"><img src="car2.jpg" alt="Car"></div>
+    <div class="gallery-item cars"><img src="car4.jpg" alt="Car"></div>
+    <div class="gallery-item cars"><img src="car5.jpg" alt="Car"></div>
+    <div class="gallery-item boats"><img src="boat1.jpg" alt="Boat"></div>
+    <div class="gallery-item boats"><img src="boat2.jpeg" alt="Boat"></div>
+    <div class="gallery-item boats"><img src="boat3.jpeg" alt="Boat"></div>
+    <div class="gallery-item boats"><img src="boat4.jpeg" alt="Boat"></div>
+  </div>
+
+  <div id="lightbox">
+    <img src="" id="lightbox-img" alt="Expanded view">
+  </div>
+
+  <div id="footer">© 2025 Pixel Vault | Made by Sreerag</div>
+
+  <script>
+
+
+  const form = document.getElementById('upload-form');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    const response = await fetch('http://localhost:3000/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.imageUrl) {
+      const newImg = document.createElement('img');
+      newImg.src = data.imageUrl;
+      newImg.style.width = "300px";
+      newImg.style.margin = "10px";
+
+      const container = document.querySelector('.gallery');
+      const itemDiv = document.createElement('div');
+      itemDiv.className = "gallery-item";
+      itemDiv.appendChild(newImg);
+
+      container.appendChild(itemDiv);
+    }
+  });
+ss
+    // Filtering Function
+    function filterGallery(category) {
+      const items = document.getElementsByClassName('gallery-item');
+      for (let item of items) {
+        item.style.display = category === 'all' || item.classList.contains(category)
+          ? 'block'
+          : 'none';
+      }
+    }
+
+    // Lightbox
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+
+    document.querySelectorAll(".gallery-item img").forEach(img => {
+      img.addEventListener("click", () => {
+        lightbox.style.display = "flex";
+        lightboxImg.src = img.src;
+      });
+    });
+
+    lightbox.addEventListener("click", () => {
+      lightbox.style.display = "none";
+    });
+
+    // Dark/Light Theme Toggle
+    function toggleTheme() {
+      const body = document.body;
+      if (body.style.backgroundColor === 'white') {
+        body.style.backgroundColor = '#1e1e1e';
+        body.style.color = 'white';
+      } else {
+        body.style.backgroundColor = 'white';
+        body.style.color = '#111';
+      }
+    }
+  </script>
+
+</body>
+</html>
